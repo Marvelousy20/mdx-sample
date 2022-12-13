@@ -1,0 +1,16 @@
+{
+  "name": "remark-end-with-code-block",
+  "version": "0.0.1-alpha",
+  "description": "This is a very simple plugin with one focus. Add whatever you pass in at the end inside of a code block. It is meant to show the markdown for a page at the end of the page.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "liltechnomancer",
+  "license": "MIT",
+  "dependencies": {
+    "mdast-util-toc": "^6.1.0",
+    "unist-util-map": "^3.0.1",
+    "remark-pluck": "*"
+  }
+}

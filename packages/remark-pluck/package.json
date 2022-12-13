@@ -1,0 +1,14 @@
+{
+  "name": "remark-pluck",
+  "version": "1.0.0",
+  "description": "This removes a node replacing it with its children. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "liltechnomancer",
+  "license": "MIT",
+  "dependencies": {
+    "unist-util-visit": "^4.1.0"
+  }
+}
