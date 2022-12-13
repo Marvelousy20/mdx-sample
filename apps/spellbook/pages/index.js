@@ -1,5 +1,6 @@
 import matter from "gray-matter";
 import { serialize } from "next-mdx-remote/serialize";
+import { bundleMDX } from "mdx-bundler";
 import remarkMdxToc from "remark-mdx-toc";
 import rehypeSlugger from "rehype-slug";
 import rehypePrism from "rehype-prism-plus";
@@ -38,28 +39,47 @@ export async function getStaticProps() {
     return { ...data, slug: file.slug };
   });
 
-  const mdx = await serialize(content, {
-    // this allows mdx components to have access to the postsData.
-    // so that a component can do what it wants.
-    scope: { postsData },
-    mdxOptions: {
-      remarkPlugins: [
-        () => remarkEndWithCodeBlock(mdxSource),
-        remarkMdxToc,
+  // const mdx = await serialize(content, {
+  //   // this allows mdx components to have access to the postsData.
+  //   // so that a component can do what it wants.
+  //   scope: { postsData },
+  //   mdxOptions: {
+  //     remarkPlugins: [
+  //       () => remarkEndWithCodeBlock(mdxSource),
+  //       remarkMdxToc,
+  //       remarkGfm,
+  //     ],
+  //     rehypePlugins: [
+  //       rehypeSlugger,
+  //       [
+  //         rehypePrism,
+  //         {
+  //           showLineNumbers: false,
+  //         },
+  //       ],
+  //     ],
+  //   },
+  // });
+
+  const { code } = await bundleMDX({
+    source: content,
+    mdxOptions(options) {
+      options.remarkPlugins = [
+        ...(options.remarkPlugins ?? []),
         remarkGfm,
-      ],
-      rehypePlugins: [
+        remarkMdxToc,
+        () => remarkEndWithCodeBlock(mdxSource),
+      ];
+      options.rehypePlugins = [
+        ...(options.rehypePlugins ?? []),
         rehypeSlugger,
-        [
-          rehypePrism,
-          {
-            showLineNumbers: false,
-          },
-        ],
-      ],
+        [rehypePrism, { showLineNumbers: false }],
+      ];
+      return options;
     },
   });
-  return { props: { mdx, frontmatter: data } };
+
+  return { props: { mdx: code, frontmatter: data } };
 }
 
 // test

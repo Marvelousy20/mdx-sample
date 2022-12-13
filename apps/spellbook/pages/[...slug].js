@@ -3,7 +3,7 @@ import matter from "gray-matter";
 import path from "path";
 import fs from "fs";
 // import { serialize } from "next-mdx-remote/serialize";
-// import rehypeSlugger from "rehype-slug";
+import rehypeSlugger from "rehype-slug";
 import rehypePrism from "rehype-prism-plus";
 import remarkMdxToc from "remark-mdx-toc";
 import remarkEndWithCodeBlock from "remark-end-with-code-block";
@@ -55,7 +55,11 @@ export async function getStaticProps({ params: { slug } }) {
         remarkMdxToc,
         () => remarkEndWithCodeBlock(source),
       ];
-      options.rehypePlugins = [...(options.rehypePlugins ?? []), rehypePrism];
+      options.rehypePlugins = [
+        ...(options.rehypePlugins ?? []),
+        rehypeSlugger,
+        [rehypePrism, { showLineNumbers: false }],
+      ];
       return options;
     },
   });
